@@ -1,0 +1,19 @@
+class Solution {
+    // 难点在于边界的处理。存在 m == 0的情况，index 会小于0，导致数组越界
+    // 借用合并链表的套路，先把通用情况合并，最后处理只剩一个数组不为空的情况
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int index1, index2;
+        index1 = m - 1;
+        index2 = n - 1;
+        for (int i = m + n - 1; i >= 0 && index2 >= 0 && index1 >= 0; i--) {
+            if (nums1[index1] < nums2[index2]) {
+                nums1[i] = nums2[index2--];
+            } else{
+                nums1[i] = nums1[index1--];
+            }
+        }
+        while (index2 >=0) { // index1大于0的情况，不需要处理，因为本来就是在nums1上操作
+            nums1[index2] = nums2[index2--]; // 把数组2全复制过来
+        }
+    }
+}
