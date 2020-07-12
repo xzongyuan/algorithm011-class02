@@ -1,0 +1,34 @@
+class Solution {
+public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums == null && nums.length == 0) return null;
+
+        Arrays.sort(nums);
+        List<Integer> path = new ArrayList<>(nums.length);
+        boolean[] selected = new boolean[nums.length];
+        backTrace(nums, path, selected, result, 0, nums.length);
+        return result;
+    }
+
+    private void backTrace(int[] nums, List<Integer> path, boolean[] selected, List<List<Integer>> result, int depth,int length) {
+        if (depth == length) {
+            result.add(new ArrayList<>(path));
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (selected[i] == true ) { // 剪枝，已经遍历过的不再遍历
+                continue;
+            }
+
+            if (i !=0 && nums[i] == nums[i-1] && selected[i-1] == false) { // 前一个数被回溯过，说明同样的排列已经有了
+                continue;
+            }
+
+            path.add(nums[i]);
+            selected[i] = true;
+            backTrace(nums, path, selected, result, depth + 1, length);
+            path.remove(path.size() - 1);
+            selected[i] = false;
+        }
+    }
+}
