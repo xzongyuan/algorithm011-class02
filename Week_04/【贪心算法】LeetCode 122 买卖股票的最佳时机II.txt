@@ -1,0 +1,24 @@
+package LeetCode122买卖股票的最佳时机II;
+
+/**
+ * profix是最新一天的价格，减去较早前的价格；
+ * 贪心算法：
+ * 1. 累加profix
+ * 2. profix计算方法，从后往前计算：
+ *    如果后面价格大于当前价格，则说明有正利润，累加。
+ *    如果后面价格小于当前价格，说明以当前价格卖出利润更高，刷新pre为当前值。
+ */
+public class Solution {
+    public int maxProfit(int[] prices) {
+        int pre = prices[prices.length - 1];
+        int profix = 0;
+        for (int i = prices.length - 2; i >= 0; i--) {
+            int cur = prices[i];
+            if (cur < pre)profix += pre - cur; //可盈利，累加
+            // 这实际合并了2种情况（直接写是比较难想到，要先写完代码，再优化），
+            // 看盈利，刷新pre；不可盈利，刷新pre为可卖出更高利润的cur
+            pre = cur;
+        }
+        return profix;
+    }
+}

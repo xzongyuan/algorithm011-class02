@@ -1,0 +1,29 @@
+package LeetCode860柠檬水找零;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * 题目先定了1次只能买1杯，每次都是消费5元。
+ * 贪心法：20找零，如果有10元，先给10元，再给5元；如果没有10元，找3张5元。
+ *         10元找零，只能返回5元。
+ * 因为选择比较少，直接统计10/5元的数量就行了。如果是复杂些的，例如有1000,500,100,50元，可能要遍历选择。
+ */
+public class Solution {
+    // 官方题解思路，统计5和10的剩余量。如果代码不用int变量统计，而是用map，代码会很冗余。
+    public boolean lemonadeChange(int[] bills) {
+        int five, ten;
+        five = ten = 0;
+        for (int bill: bills) {
+            if (bill == 5) five++;
+            else if (bill == 10){five--; ten++;}
+            else{
+                if (ten > 0){five--;ten--;}
+                else five -= 3;
+            }
+            if (five < 0) return false;
+        }
+        return true;
+    }
+
+}
