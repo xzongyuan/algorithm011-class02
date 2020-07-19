@@ -1,0 +1,41 @@
+class Solution {
+    public int robotSim(int[] commands, int[][] obstacles) {
+        int[] position = new int[2];
+        position[0] = position[1] = 0;
+        int[][] deltas = new int[][]{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};  上、右、下、左
+        SetString obsSet = new HashSet();
+        for (int[] obstacle  obstacles) {
+            obsSet.add(obstacle[0]+ _ + obstacle[1]);
+        }
+        int curIndex = 0;
+        int[] curDelta = deltas[curIndex];
+        int maxDis = 0;
+        for (int command  commands) {
+            switch (command) {
+                case -1
+                    curIndex = (curIndex + 1) % 4;
+                    curDelta = deltas[curIndex];
+                    break;
+                case -2
+                    curIndex = (curIndex + 3) % 4;
+                    curDelta = deltas[curIndex];  坐标的完整写法是(curIndex - 1 + 4) % 4
+                     break;
+                default
+                    int[] nextPosition = new int[2];
+                    while (command--  0) {
+                        nextPosition[0] = position[0] + curDelta[0];
+                        nextPosition[1] = position[1] + curDelta[1];
+                        if (!obsSet.contains(nextPosition[0] + _ + nextPosition[1])) {    
+                             position = nextPosition; 这个是引用赋值，会导致两个变量指向同一个区域
+                            position[0] = nextPosition[0];
+                            position[1] = nextPosition[1];
+                            int dis = Math.multiplyExact(position[0], position[0]) + Math.multiplyExact(position[1], position[1]);
+                            maxDis = Math.max(dis, maxDis);
+                        }
+                    }
+                    break;
+            } 
+        }
+        return maxDis;
+    }
+}
