@@ -1,0 +1,19 @@
+class Solution {
+   
+    public int countSubstrings(String s) {
+        char[] arr = s.toCharArray();
+        int count = 0;
+        boolean[][] dp = new boolean[arr.length][arr.length];
+
+        for (int j = 0; j < arr.length; j++) {
+            for (int i = j; i >= 0; i--) {
+                // j-i<2是关键。表示j和i之间最多隔1个元素，只要arr[i]==arr[j]即可，不需要考虑dp[i+1][j-1]
+                if (arr[i] == arr[j] && ((j - i < 2) || dp[i + 1][j - 1])) {
+                    dp[i][j] = true;
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+}
