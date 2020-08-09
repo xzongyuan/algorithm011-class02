@@ -1,0 +1,54 @@
+class Trie {
+    public class TreeNode {
+        char c;
+        TreeNode[] children = new TreeNode[26];
+        boolean isEnd = false;
+    }
+
+    TreeNode root = new TreeNode();
+    /** Initialize your data structure here. */
+    public Trie() {
+    }
+
+    /** Inserts a word into the trie. */
+    public void insert(String word) {
+        char[] arr = word.toCharArray();
+        TreeNode cur = root;
+        for (char c : arr) {
+            TreeNode next = cur.children[c - 'a'];
+            if (next == null) {
+                cur.children[c - 'a'] = new TreeNode();
+                next = cur.children[c - 'a'];
+                next.c = c;
+            }
+            cur = next;
+        }
+        cur.isEnd = true;
+    }
+
+    /** Returns if the word is in the trie. */
+    public boolean search(String word) {
+        char[] arr = word.toCharArray();
+        TreeNode cur = root;
+        for (char c : arr) {
+            TreeNode next = cur.children[c - 'a'];
+            if (next == null) return false;
+            cur = next;
+        }
+        return cur.isEnd;
+    }
+
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    public boolean startsWith(String prefix) {
+        char[] arr = prefix.toCharArray();
+        TreeNode cur = root;
+        for (char c : arr) {
+            TreeNode next = cur.children[c - 'a'];
+            if (next == null) return false;
+            cur = next;
+        }
+        return true;
+    }
+
+}
+ 

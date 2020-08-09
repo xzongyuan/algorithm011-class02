@@ -1,0 +1,85 @@
+解题思路
+经典题。
+组成要素：
+
+find方法
+union方法
+count
+路径压缩：有2种实现方式，第一种方式，比较自然，但需要缓存tmp，代码多些；
+第二种算法含义：把祖父节点的parent赋值给父节点后，父节点和祖父节点的parent是一样的，就已经压缩了，可以直接跳过parent[x]
+union时的策略，可以根据Rank，也可以直接把其中一个赋给另一个
+findRoot的优化版本
+
+
+    public int findRoot(int x) {
+        while (parent[x] != x) {
+            parent[x] = parent[parent[x]]; // 每个循环，压缩2个元素。
+            x = parent[x];
+        }
+        return x;
+    }
+要点:
+
+写findRoot的时候，忘记while循环里，要刷新parent[x]里面的x,导致报错
+后来算法1，改为parent[root]=root;
+再后来，用算法2，直接修改x了，代码是简单了，但工程代码不推荐修改入参。
+代码
+
+class Solution {
+public class DisjointSet {
+        int count;
+        int[] parent;
+        public DisjointSet(int count) {
+            this.count = count;
+            parent = new int[count];
+            for (int i = 0; i < count; i++) {
+                parent[i] = i;
+            }
+        }
+
+        /**
+         * 使用路径压缩算法
+         * @param x
+         * @return
+         */
+        public int findRoot(int x) {
+            int root = x;  // 不改变入参，用root表示
+            while (root != parent[root]) {
+                root = parent[root];
+            }
+
+            // root已经找到了，下面是路径压缩
+            int tmp = x;
+            while (root != parent[x]) {
+                tmp = parent[x]; // 刷新x的parent前，先保留
+                parent[x] = root;
+                x = tmp; // 迭代更新各个parent的父节点为root
+            }
+            return root;
+        }
+
+        public void union(int x, int y) {
+            int xRoot = findRoot(x);
+            int yRoot = findRoot(y);
+            if (xRoot == yRoot) return; // x和y是一个朋友圈，不需要处理
+
+            parent[xRoot] = yRoot;
+            count--; // 不是同一个朋友圈，融合后，朋友圈总数减少1            
+        }
+
+    }
+
+    public int findCircleNum(int[][] M) {
+        if (M == null || M.length == 0) return 0;
+        DisjointSet disjointSet = new DisjointSet(M.length);
+        for (int i = 0; i < M.length; i++) {
+            for (int j = i; j < M[0].length; j++) {
+                if (M[i][j] == 1) {
+                    disjointSet.union(i, j);
+                }
+            }
+        }
+        return disjointSet.count;
+    }
+}
+ 
